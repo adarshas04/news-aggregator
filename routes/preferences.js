@@ -20,9 +20,6 @@ preferences.get("/", verifyToken, (req, res) => {
 
 preferences.put("/", validatePreferenceParam, verifyToken, (req, res) => {
     try {
-        console.log(req.user);
-        console.log(req.message);
-        console.log(req.statusCode);
         const { username } = req.user;
         const user = users.users.find((user) => user.username === username);
         if (user) {

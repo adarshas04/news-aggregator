@@ -82,7 +82,6 @@ tap.test('PUT /users/preferences', async (t) => {
 tap.test('Check GET /users/preferences', async (t) => {
     const response = await server.get('/users/preferences').set('Authorization', `Bearer ${token}`);
     t.equal(response.status, 200);
-    console.log(response.body);
     t.same(response.body.newsPreferences, ['movies', 'comics', 'games']);
     t.end();
 });

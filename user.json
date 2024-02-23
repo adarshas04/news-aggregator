@@ -26,7 +26,7 @@
             "username": "test1",
             "name": "Test User",
             "email": "testuser@gmail.com",
-            "newsPreferences": [],
+            "newsPreferences": ["comedy"],
             "password": "$2b$08$WVsywXnrsa2cZZAcDcz5E.71PDOZOs1uh.9hvZos6K4dOaLp1rG/a"
         }
     ]
