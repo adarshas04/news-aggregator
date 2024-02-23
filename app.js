@@ -7,8 +7,6 @@ const preferences = require('./routes/preferences');
 const news = require('./routes/news'); 
 require('dotenv').config();
 
-//pub_387364a495bf7c8df5eabea43fc9f3ad9468d
-//c98cd3ffcd8243539f60de0645fb4568
 const app = express();
 const port = process.env.PORT;
 
