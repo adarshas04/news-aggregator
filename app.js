@@ -1,6 +1,6 @@
 const express = require('express');
 const { register, login } = require('./controllers/authController');
-const { validateLoginParams, validateRegistrationParams } = require('./helpers/validator');
+const { validateLoginParams, validateRegistrationParams } = require('./middlewares/validator');
 const preferences = require('./routes/preferences');
 const news = require('./routes/news');
 require('dotenv').config();
