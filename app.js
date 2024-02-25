@@ -1,10 +1,8 @@
 const express = require('express');
-const Validator = require('./helpers/validator');
-const fs = require('fs');
-const {register, login} = require('./controllers/authController');
-const {validateLoginParams, validateRegistrationParams} = require('./helpers/validator');
-const preferences = require('./routes/preferences'); 
-const news = require('./routes/news'); 
+const { register, login } = require('./controllers/authController');
+const { validateLoginParams, validateRegistrationParams } = require('./helpers/validator');
+const preferences = require('./routes/preferences');
+const news = require('./routes/news');
 require('dotenv').config();
 
 const app = express();
@@ -23,10 +21,11 @@ app.use('/news', news);
 app.use('/users', usersRouter);
 
 app.listen(port, (err) => {
-    if (err) {
-        return console.log('Something bad happened', err);
-    }
+  if (err) {
+    console.log('Something bad happened', err);
+  } else {
     console.log(`Server is listening on ${port}`);
+  }
 });
 
 module.exports = app;

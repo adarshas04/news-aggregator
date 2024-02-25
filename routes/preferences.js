@@ -4,24 +4,26 @@ const users = require("../user.json");
 const preferences = express.Router();
 const path = require("path");
 const fs = require("fs");
-const {validatePreferenceParam} = require('../helpers/validator');
+const { validatePreferenceParam } = require('../helpers/validator');
+const { sendResponse, fetchUserIfExists } = require('../helpers/utils');
 
 preferences.get("/", verifyToken, (req, res) => {
     try {
-        if(req.statusCode === 200){
-            const user = users.users.find((user) => user.username === req.user.username);
-            res.status(200).json({ username: user.username, newsPreferences: user.newsPreferences, message: "Request successful" });
+        if (req.statusCode === 200) {
+            const user = fetchUserIfExists(users.users, req.user.username);
+            sendResponse(res, 200, { username: user.username, newsPreferences: user.newsPreferences, message: "Request successful" });
+        } else {
+            sendResponse(res, req.statusCode, { user: req.user, message: req.message });
         }
-        res.status(req.statusCode).json({ user: req.user, message: req.message });
     } catch (e) {
-        res.status(500).json({ message: e.message });
+        sendResponse(res, 500, { message: e.message });
     }
 });
 
 preferences.put("/", validatePreferenceParam, verifyToken, (req, res) => {
     try {
         const { username } = req.user;
-        const user = users.users.find((user) => user.username === username);
+        const user = fetchUserIfExists(users.users, username);
         if (user) {
             user.newsPreferences = req.body.newsPreferences;
             fs.writeFile(
@@ -30,18 +32,17 @@ preferences.put("/", validatePreferenceParam, verifyToken, (req, res) => {
                 { encoding: "utf8", flag: "w" },
                 (err) => {
                     if (err) {
-                        return res
-                            .status(500)
-                            .send("Write to file failed. Please try again later");
+                        sendResponse(res, 500, "Write to file failed. Please try again later");
+                    } else {
+                        sendResponse(res, 200, { message: "User preferences updated", newsPreferences: user.newsPreferences });
                     }
-                    res.status(200).send({ message: "User preferences updated", newsPreferences: user.newsPreferences});
                 }
             );
         } else {
-            res.status(404).send("User not found");
+            sendResponse(res, 404, "User not found");
         }
     } catch (e) {
-        res.status(500).json({ message: e.message });
+        sendResponse(res, 500, { message: e.message });
     }
 });
 

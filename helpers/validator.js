@@ -17,37 +17,17 @@ const preferenceSchema = Joi.object({
   newsPreferences: Joi.array().items(Joi.string()).required()
 });
 
-function validateRegistrationParams(req, res, next) {
-  registrationSchema
-    .validateAsync(req.body)
-    .then(() => {
-      next();
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.details.map((d) => d.message) });
-    });
-}
+const validateParams = (schema, statusCode) => async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    res.status(statusCode).json({ error: error.details.map((d) => d.message) });
+  }
+};
 
-function validateLoginParams(req, res, next) {
-  loginSchema
-    .validateAsync(req.body)
-    .then(() => {
-      next();
-    })
-    .catch((error) => {
-      res.status(401).json({ error: error.details.map((d) => d.message) });
-    });
-}
-
-function validatePreferenceParam(req, res, next) {
-  preferenceSchema
-    .validateAsync(req.body)
-    .then(() => {
-      next();
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.details.map((d) => d.message) });
-    });
-}
+const validateRegistrationParams = validateParams(registrationSchema, 400);
+const validateLoginParams = validateParams(loginSchema, 401);
+const validatePreferenceParam = validateParams(preferenceSchema, 400);
 
 module.exports = { validateLoginParams, validateRegistrationParams, validatePreferenceParam };
